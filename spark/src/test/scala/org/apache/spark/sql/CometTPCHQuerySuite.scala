@@ -143,7 +143,7 @@ class CometTPCHQuerySuite extends QueryTest with CometTPCBase with SQLQueryTestH
     val shouldSortResults = sortMergeJoinConf != conf // Sort for other joins
     withSQLConf(conf.toSeq: _*) {
       try {
-        val (schema, output) = handleExceptions(getNormalizedResult(spark, query))
+        val (schema, output) = handleExceptions(getNormalizedQueryExecutionResult(spark, query))
         val queryString = query.trim
         val outputString = output.mkString("\n").replaceAll("\\s+$", "")
         if (shouldRegenerateGoldenFiles) {

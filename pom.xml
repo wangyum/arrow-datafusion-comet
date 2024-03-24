@@ -169,6 +169,11 @@ under the License.
       </dependency>
       <dependency>
         <groupId>org.apache.arrow</groupId>
+        <artifactId>arrow-memory-core</artifactId>
+        <version>${arrow.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.arrow</groupId>
         <artifactId>arrow-memory-unsafe</artifactId>
         <version>${arrow.version}</version>
       </dependency>
@@ -527,6 +532,16 @@ under the License.
         <additional.3_3.test.source>spark-3.3-plus</additional.3_3.test.source>
         <additional.3_4.test.source>spark-3.4</additional.3_4.test.source>
         <shims.minorVerSrc>spark-3.4</shims.minorVerSrc>
+      </properties>
+    </profile>
+    <profile>
+      <id>spark-3.5</id>
+      <properties>
+        <scala.version>2.12.18</scala.version>
+        <spark.version>3.5.1</spark.version>
+        <spark.version.short>3.5</spark.version.short>
+        <parquet.version>1.13.1</parquet.version>
+        <additional.test.source>spark-3.3-plus</additional.test.source>
       </properties>
     </profile>
 

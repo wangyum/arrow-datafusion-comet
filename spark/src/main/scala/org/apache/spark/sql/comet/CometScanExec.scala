@@ -268,7 +268,7 @@ case class CometScanExec(
       selectedPartitions
         .flatMap { p =>
           p.files.map { f =>
-            PartitionedFileUtil.getPartitionedFile(f, f.getPath, p.values)
+            PartitionedFileUtil.getPartitionedFile(f, p.values)
           }
         }
         .groupBy { f =>
@@ -358,7 +358,6 @@ case class CometScanExec(
             PartitionedFileUtil.splitFiles(
               sparkSession = relation.sparkSession,
               file = file,
-              filePath = filePath,
               isSplitable = isSplitable,
               maxSplitBytes = maxSplitBytes,
               partitionValues = partition.values)

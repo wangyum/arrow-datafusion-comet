@@ -82,6 +82,15 @@ trait ShimCometScanExec {
               readSchema,
               fileConstantMetadataColumns,
               options)
+          case 7 =>
+            c.newInstance(
+              sparkSession,
+              readFunction,
+              filePartitions,
+              readSchema,
+              fileConstantMetadataColumns,
+              Map.empty,
+              options)
         }
       }
       .last

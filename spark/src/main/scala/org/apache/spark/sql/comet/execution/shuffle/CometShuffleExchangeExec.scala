@@ -44,7 +44,7 @@ import org.apache.spark.sql.execution.exchange.{ENSURE_REQUIREMENTS, ShuffleExch
 import org.apache.spark.sql.execution.exchange.ShuffleExchangeExec
 import org.apache.spark.sql.execution.metric.{SQLMetric, SQLMetrics, SQLShuffleReadMetricsReporter, SQLShuffleWriteMetricsReporter}
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.vectorized.ColumnarBatch
 import org.apache.spark.util.MutablePair
 import org.apache.spark.util.collection.unsafe.sort.{PrefixComparators, RecordComparator}
@@ -430,8 +430,8 @@ object CometShuffleExchangeExec extends ShimCometShuffleExchangeExec {
         serializer,
         shuffleWriterProcessor = ShuffleExchangeExec.createShuffleWriteProcessor(writeMetrics),
         shuffleType = CometColumnarShuffle,
-        schema = Some(StructType.fromAttributes(outputAttributes)))
-
+        schema = Some(StructType(outputAttributes.map(a =>
+          StructField(a.name, a.dataType, a.nullable, a.metadata)))))
     dependency
   }
 }
