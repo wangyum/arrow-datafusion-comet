@@ -44,7 +44,6 @@ import org.apache.spark.sql.execution.exchange.{ENSURE_REQUIREMENTS, ShuffleExch
 import org.apache.spark.sql.execution.exchange.ShuffleExchangeExec
 import org.apache.spark.sql.execution.metric.{SQLMetric, SQLMetrics, SQLShuffleReadMetricsReporter, SQLShuffleWriteMetricsReporter}
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.vectorized.ColumnarBatch
 import org.apache.spark.util.MutablePair
 import org.apache.spark.util.collection.unsafe.sort.{PrefixComparators, RecordComparator}
@@ -56,6 +55,7 @@ import org.apache.comet.serde.{OperatorOuterClass, PartitioningOuterClass, Query
 import org.apache.comet.serde.OperatorOuterClass.Operator
 import org.apache.comet.serde.QueryPlanSerde.serializeDataType
 import org.apache.comet.shims.ShimCometShuffleExchangeExec
+import org.apache.spark.sql.catalyst.types.DataTypeUtils
 
 /**
  * Performs a shuffle that will result in the desired partitioning.
@@ -386,7 +386,7 @@ object CometShuffleExchangeExec extends ShimCometShuffleExchangeExec {
           val pageSize = SparkEnv.get.memoryManager.pageSizeBytes
 
           val sorter = UnsafeExternalRowSorter.createWithRecordComparator(
-            StructType.fromAttributes(outputAttributes),
+            DataTypeUtils.fromAttributes(outputAttributes),
             recordComparatorSupplier,
             prefixComparator,
             prefixComputer,
@@ -430,8 +430,8 @@ object CometShuffleExchangeExec extends ShimCometShuffleExchangeExec {
         serializer,
         shuffleWriterProcessor = ShuffleExchangeExec.createShuffleWriteProcessor(writeMetrics),
         shuffleType = CometColumnarShuffle,
-        schema = Some(StructType(outputAttributes.map(a =>
-          StructField(a.name, a.dataType, a.nullable, a.metadata)))))
+        schema = Some(DataTypeUtils.fromAttributes(outputAttributes)))
+
     dependency
   }
 }
